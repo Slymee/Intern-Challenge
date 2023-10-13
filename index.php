@@ -5,6 +5,6 @@ $apiURL="https://raw.githubusercontent.com/younginnovations/internship-challenge
 $apiFetch= new APIFetch($apiURL);
 // echo $apiFetch->displayURL();
 
-
+$apiFetch->displayJson();
 
 ?>

@@ -1,3 +1,12 @@
+<style>
+    table,th,td{
+        border: 1px solid black;
+        border-collapse: collapse;
+
+    }
+</style>
+
+
 <?php
 class APIFetch{
     private $url;
@@ -24,7 +33,7 @@ class APIFetch{
         }
 
         curl_close($curlInit);
-        return $result;
+        return curl_exec($curlInit);
 
     }
 
@@ -32,6 +41,32 @@ class APIFetch{
     public function jsonData(){
         return json_decode($this->apiDataFetch(), true);
     }
+
+    public function displayJson(){
+        $data = $this->jsonData();?>
+        <h1>Data from API</h1><br>
+        <table>
+            <tr>
+                <th>Year</th>
+                <th>Petroleum Product</th>
+                <th>Sale</th>
+                <th>Country</th>
+            </tr>
+        <?php
+
+        foreach($data as $item){?>
+            <tr>
+                <td><?php echo $item['year'];?></td>
+                <td><?php echo $item['petroleum_product'];?></td>
+                <td><?php echo $item['sale'];?></td>
+                <td><?php echo $item['country'];?></td>
+            </tr>
+
+        <?php } ?>
+        </table><?php
+            
+        }
+    
 }
 
 ?>
