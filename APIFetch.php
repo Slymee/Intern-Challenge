@@ -8,6 +8,13 @@
 
 
 <?php
+    include('DatabaseOperation.php');
+?>
+
+
+
+
+<?php
 class APIFetch{
     private $url;
 
@@ -42,9 +49,14 @@ class APIFetch{
         return json_decode($this->apiDataFetch(), true);
     }
 
+    
     public function displayJson(){
+        //create database 
+        $db = new DatabaseOperate();
+        $db->createDatabase("petroleum_data.db");
+
         $data = $this->jsonData();?>
-        <h1>Data from API</h1><br>
+        <h1>Data from API</h1>
         <table>
             <tr>
                 <th>Year</th>
@@ -53,6 +65,8 @@ class APIFetch{
                 <th>Country</th>
             </tr>
         <?php
+
+
 
         foreach($data as $item){?>
             <tr>
@@ -66,6 +80,8 @@ class APIFetch{
         </table><?php
             
         }
+    
+    
     
 }
 
