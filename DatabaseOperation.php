@@ -23,5 +23,24 @@ class DatabaseOperate{
             die("Table creation failed: ". $e->getMessage());
         }
     }
+
+    function databaseStore($year, $product, $country, $sale){
+        $yearId=$this->getOrCreateId('years', 'year', $year, 'y_id');
+
+        $productId=$this->getOrCreateId('products', 'p_name', $product, 'p_id');
+
+        $countryId=$this->getOrCreateId('countries', 'c_name', $cpuntry, 'c_id');
+
+        $saleId = $this->getSaleId($yearId, $productId, $countryId);
+        
+    }
+
+    function getOrCreateId($table, $column, $data, $primeKey){
+
+    }
+
+    function getSaleId($yearId, $productId, $countryId){
+        
+    }
 }
 ?>

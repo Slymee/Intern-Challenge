@@ -51,6 +51,8 @@ class APIFetch{
 
     
     public function displayJson(){
+
+        try{
         //create database 
         $dbObject = new DatabaseOperate("petroleum_data.db");
         $dbObject->createTable();
@@ -76,10 +78,24 @@ class APIFetch{
                 <td><?php echo $item['country'];?></td>
             </tr>
 
-        <?php } ?>
+        <?php 
+            // $year=$item['year'];
+            // $product=$item['petroleum_product'];
+            // $sale=$item['sale'];
+            // $country=$item['country'];
+
+            $dbObject->databaseStore($item['year'],$item['petroleum_product'],$item['country'],$item['sale']);
+        
+        
+        }
+
+        ?>
         </table><?php
             
+        }catch(Exception $e){
+            die("Exception caught: ". $e->getMessage());
         }
+    }
     
     
     
