@@ -52,8 +52,8 @@ class APIFetch{
     
     public function displayJson(){
         //create database 
-        $db = new DatabaseOperate();
-        $db->createDatabase("petroleum_data.db");
+        $dbObject = new DatabaseOperate("petroleum_data.db");
+        $dbObject->createTable();
 
         $data = $this->jsonData();?>
         <h1>Data from API</h1>
