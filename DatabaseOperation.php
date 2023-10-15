@@ -26,26 +26,23 @@ class DatabaseOperate{
     }
 
     function checkYearExist($year){
-            $stmt=$this->dbStatement->prepare("SELECT * FROM years WHERE [year]= ':year'");
-            $stmt->bindParam(':year', $year);
-            $result = $stmt->execute();
-            var_dump($result);
+        $stmt = $this->dbStatement->prepare("SELECT * FROM years WHERE [year] = :year");
+        $stmt->bindParam(':year', $year, PDO::PARAM_STR);
             
-            if ($result) {
-                $data = $stmt->fetchAll();
-                // var_dump($data);
-                return $data??false;
-            } else {
-                throw new Exception();
-            }
+        if ($stmt->execute()) {
+            $data = $stmt->fetchAll();
+            return $data??false;
+        } else {
+            throw new Exception();
+        }
     }
 
     function checkProductExist($product){
-        $stmt=$this->dbStatement->prepare("SELECT * FROM product WHERE p_name=':product'");
-        $stmt->bindParam(':product', $product);
-        $result = $stmt->execute();
+        $stmt=$this->dbStatement->prepare("SELECT * FROM products WHERE p_name= :product");
+        $stmt->bindParam(':product', $product, PDO::PARAM_STR);
         
-        if ($result) {
+        
+        if ($stmt->execute()) {
             $data = $stmt->fetchAll();
             // var_dump($data);
             return $data??false;
@@ -55,36 +52,33 @@ class DatabaseOperate{
     }
 
     function checkCountryExist($country){
-        try{
-            $stmt= $this->dbStatement->exec("SELECT COUNT(*) FROM countries WHERE c_name = '$country'");
 
+            $stmt=$this->dbStatement->prepare("SELECT * FROM countries WHERE c_name= :country");
+            $stmt->bindParam(':country', $country, PDO::PARAM_STR);
             
-
-
-            if ($stmt && $stmt->fetchColumn() > 0) {
-                return true;
+            
+            if ($stmt->execute()) {
+                $data = $stmt->fetchAll();
+                // var_dump($data);
+                return $data??false;
             } else {
-                return false;
+                throw new Exception();
             }
-
-        }catch(Exception $e){
-            die("Exception caught:". $e->getMessage());
-        }
     }
 
 
     function getSaleExist($yearId, $productId, $countryId){
-        try{
-            $stmt=$this->dbStatement->exec("SELECT COUNT(`sale_id`) FROM `sales` WHERE y_id = '$yearId' AND p_id = '$productId' AND c_id = '$countryId'");
+        $stmt=$this->dbStatement->prepare("SELECT * FROM sales WHERE y_id = :yearId AND p_id = :productId AND c_id = :countryId");
+        $stmt->bindParam(':yearId', $yearId, PDO::PARAM_INT);
+        $stmt->bindParam(':productId', $productId, PDO::PARAM_INT);
+        $stmt->bindParam(':countryId', $countryId, PDO::PARAM_INT);
 
-            if ($stmt && $stmt->fetchColumn() > 0) {
-                return true;
-            } else {
-                return false;
-            }
-
-        }catch(Exception $e){
-            die("Exception caught:". $e->getMessage());
+        if ($stmt->execute()) {
+            $data = $stmt->fetchAll();
+            // var_dump($data);
+            return $data??false;
+        }else{
+            throw new Exception();
         }
     }
 
@@ -98,16 +92,19 @@ class DatabaseOperate{
             if(!($this->checkYearExist($year))){
                 $this->dbStatement->exec("INSERT INTO `years` (`year`) VALUES ('$year')");
                 $yearId=$this->dbStatement->lastInsertId();
+                var_dump($yearId);
             }
     
             if(!($this->checkProductExist($product))){
                 $this->dbStatement->exec("INSERT INTO `products` (`p_name`) VALUES ('$product')");
                 $productId=$this->dbStatement->lastInsertId();
+                var_dump($productId);
             }
     
             if(!($this->checkCountryExist($country))){
                 $this->dbStatement->exec("INSERT INTO `countries` (`c_name`) VALUES ('$country')");
                 $countryId=$this->dbStatement->lastInsertId();
+                var_dump($countryId);
             }
     
             if(!($this->getSaleExist($yearId,$productId,$countryId))){
