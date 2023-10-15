@@ -46,7 +46,7 @@ class APIFetch{
 
     //retrive json data
     public function jsonData(){
-        return json_decode($this->apiDataFetch(), true);
+        return json_decode($this->apiDataFetch(), true); 
     }
 
     
