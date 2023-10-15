@@ -19,6 +19,14 @@ $dbOpe->displayCountryTable();
 $dbOpe->displaySalesTable();
 
 
+$dbOpe->displayEachProductTotal();
+
+$dbOpe->displayThreeHighestSaleCountry();
+
+$dbOpe->displayThreeLowestSaleCountry();
+
+
+
 
 
 

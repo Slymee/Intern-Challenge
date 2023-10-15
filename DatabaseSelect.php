@@ -124,5 +124,85 @@
             </table>
         <?php
         }
+
+
+        function displayEachProductTotal(){
+            echo "<h2>Total sale of each Product</h2>";
+
+            $stmt = $this->dbStatement->prepare("SELECT `p_name`, SUM(`sale`) as sum FROM `sales` JOIN `products` ON `sales`.`p_id` = `products`.`p_id` GROUP BY `p_name`");
+            $stmt->execute();
+            ?>
+            <table>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Total Sale</th>
+                </tr>
+                <?php
+                while($row=$stmt->fetch(PDO::FETCH_ASSOC)){?>
+                    <tr>
+                        <td><?php echo $row['p_name'];?></td>
+                        <td><?php echo $row['sum'];?></td>
+                    </tr>
+                  
+                <?php
+                }
+                ?>
+            </table>
+        <?php
+        }
+
+
+        function displayThreeHighestSaleCountry(){
+            echo "<h2>Three Highest Sale Counties</h2>";
+
+            $stmt = $this->dbStatement->prepare("SELECT `c_name`, SUM(`sale`) as sum FROM `sales` JOIN `countries` ON `sales`.`c_id` = `countries`.`c_id` GROUP BY `c_name` ORDER BY `sum` DESC LIMIT 3");
+            $stmt->execute();
+            ?>
+            <table>
+                <tr>
+                    <th>Country</th>
+                    <th>Total Sale</th>
+                </tr>
+                <?php
+                while($row=$stmt->fetch(PDO::FETCH_ASSOC)){?>
+                    <tr>
+                        <td><?php echo $row['c_name'];?></td>
+                        <td><?php echo $row['sum'];?></td>
+                    </tr>
+                  
+                <?php
+                }
+                ?>
+            </table>
+        <?php
+        }
+
+
+        function displayThreeLowestSaleCountry(){
+            echo "<h2>Three Lowest Sale Counties</h2>";
+
+            $stmt = $this->dbStatement->prepare("SELECT `c_name`, SUM(`sale`) as sum FROM `sales` JOIN `countries` ON `sales`.`c_id` = `countries`.`c_id` GROUP BY `c_name` ORDER BY `sum` ASC LIMIT 3");
+            $stmt->execute();
+            ?>
+            <table>
+                <tr>
+                    <th>Country</th>
+                    <th>Total Sale</th>
+                </tr>
+                <?php
+                while($row=$stmt->fetch(PDO::FETCH_ASSOC)){?>
+                    <tr>
+                        <td><?php echo $row['c_name'];?></td>
+                        <td><?php echo $row['sum'];?></td>
+                    </tr>
+                  
+                <?php
+                }
+                ?>
+            </table>
+        <?php
+        }
+
+
     }
 ?>
