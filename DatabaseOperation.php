@@ -91,25 +91,55 @@ class DatabaseOperate{
         try{
             if(!($this->checkYearExist($year))){
                 $this->dbStatement->exec("INSERT INTO `years` (`year`) VALUES ('$year')");
-                $yearId=$this->dbStatement->lastInsertId();
-                var_dump($yearId);
+                // $stmt=$this->dbStatement->prepare("SELECT y_id FROM years WHERE [year] = :_year");
+                // $stmt->bindParam(':_year', $year, PDO::PARAM_STR);
+                // $stmt->execute();
+                // $yearID=$stmt->fetchColumn();
+                // var_dump($yearID);
             }
+
     
             if(!($this->checkProductExist($product))){
                 $this->dbStatement->exec("INSERT INTO `products` (`p_name`) VALUES ('$product')");
-                $productId=$this->dbStatement->lastInsertId();
-                var_dump($productId);
+                // $stmt=$this->dbStatement->prepare("SELECT p_id FROM products WHERE p_name = :product");
+                // $stmt->bindParam(':product', $product, PDO::PARAM_STR);
+                // $stmt->execute();
+                // $productID=$stmt->fetchColumn();
+                // var_dump($productID);
             }
+
     
             if(!($this->checkCountryExist($country))){
                 $this->dbStatement->exec("INSERT INTO `countries` (`c_name`) VALUES ('$country')");
-                $countryId=$this->dbStatement->lastInsertId();
-                var_dump($countryId);
+                // $stmt=$this->dbStatement->prepare("SELECT c_id FROM countries WHERE c_name = :country");
+                // $stmt->bindParam(':country', $country, PDO::PARAM_STR);
+                // $stmt->execute();
+                // $countryID=$stmt->fetchColumn();
+                // var_dump($countryID);
             }
     
-            if(!($this->getSaleExist($yearId,$productId,$countryId))){
-                $this->dbStatement->exec("INSERT INTO `sales` (`y_id`, `p_id`, `sale`, `c_id`) VALUES ('$yearId', '$productId', '$sale', '$countryId')");
-                $saleId=$this->dbStatement->lastInsertId();
+            if(!($this->getSaleExist($year,$product,$country))){
+                $yearIdSelect=$this->dbStatement->prepare("SELECT y_id FROM years WHERE [year] = :_year");
+                $yearIdSelect->bindParam(':_year', $year, PDO::PARAM_STR);
+                $yearIdSelect->execute();
+                $yearId=$yearIdSelect->fetchColumn();
+
+                $productIdSelect=$this->dbStatement->prepare("SELECT p_id FROM products WHERE p_name = :_product");
+                $productIdSelect->bindParam(':_product', $product, PDO::PARAM_STR);
+                $productIdSelect->execute();
+                $productId=$productIdSelect->fetchColumn();
+
+                $countryIdSelect=$this->dbStatement->prepare("SELECT c_id FROM countries WHERE c_name = :_country");
+                $countryIdSelect->bindParam(':_country', $country, PDO::PARAM_STR);
+                $countryIdSelect->execute();
+                $countryId=$countryIdSelect->fetchColumn();
+
+                $stmt=$this->dbStatement->prepare("INSERT INTO `sales` (`y_id`, `p_id`, `sale`, `c_id`) VALUES (:yearId, :productId, :sale, :countryId)");
+                $stmt->bindParam(':yearId', $yearId, PDO::PARAM_INT);
+                $stmt->bindParam(':productId', $productId, PDO::PARAM_INT);
+                $stmt->bindParam(':sale', $sale, PDO::PARAM_STR);
+                $stmt->bindParam(':countryId', $countryId, PDO::PARAM_INT);
+                $stmt->execute();
             }
             
         }catch(Exception $e){
