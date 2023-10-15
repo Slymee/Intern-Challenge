@@ -25,6 +25,8 @@ $dbOpe->displayThreeHighestSaleCountry();
 
 $dbOpe->displayThreeLowestSaleCountry();
 
+$dbOpe->averageFourYearInvervalSale();
+
 
 
 

@@ -203,6 +203,60 @@
         <?php
         }
 
+        function averageFourYearInvervalSale(){
+            echo "<h2>Average Sale Four Year Interval</h2>";
+
+            $stmt = $this->dbStatement->prepare("SELECT
+            p_name,
+            CASE
+                WHEN CAST(year AS INTEGER) BETWEEN 2007 AND 2011 THEN '2007-2011'
+                WHEN CAST(year AS INTEGER) BETWEEN 2012 AND 2014 THEN '2012-2014'
+                ELSE 'Other'
+            END as [Interval],
+            AVG(sale) as Average
+        FROM
+            (SELECT
+                p_name,
+                year,
+                sale
+            FROM
+                sales
+            JOIN
+                products ON sales.p_id = products.p_id
+            JOIN
+                years ON sales.y_id = years.y_id
+            WHERE
+                sale > 0
+            AND
+                CAST(year AS INTEGER) BETWEEN 2007 AND 2014) AS filtered_data
+        GROUP BY
+            p_name, [Interval]
+        ORDER BY
+            p_name, [Interval];
+        ");
+            $stmt->execute();
+            ?>
+            <table>
+                <tr>
+                    <th>Product</th>
+                    <th>Interval</th>
+                    <th>Average</th>
+                </tr>
+                <?php
+                while($row=$stmt->fetch(PDO::FETCH_ASSOC)){?>
+                    <tr>
+                        <td><?php echo $row['p_name'];?></td>
+                        <td><?php echo $row['Interval'];?></td>
+                        <td><?php echo $row['Average'];?></td>
+                    </tr>
+                  
+                <?php
+                }
+                ?>
+            </table>
+        <?php
+        }
+
 
     }
 ?>
