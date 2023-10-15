@@ -67,7 +67,23 @@ class DatabaseOperate{
     }
 
 
-    function getSaleExist($yearId, $productId, $countryId){
+    function getSaleExist($year, $product, $country){
+        $yearIdSelect=$this->dbStatement->prepare("SELECT y_id FROM years WHERE [year] = :_year");
+        $yearIdSelect->bindParam(':_year', $year, PDO::PARAM_STR);
+        $yearIdSelect->execute();
+        $yearId=$yearIdSelect->fetchColumn();
+
+        $productIdSelect=$this->dbStatement->prepare("SELECT p_id FROM products WHERE p_name = :_product");
+        $productIdSelect->bindParam(':_product', $product, PDO::PARAM_STR);
+        $productIdSelect->execute();
+        $productId=$productIdSelect->fetchColumn();
+
+        $countryIdSelect=$this->dbStatement->prepare("SELECT c_id FROM countries WHERE c_name = :_country");
+        $countryIdSelect->bindParam(':_country', $country, PDO::PARAM_STR);
+        $countryIdSelect->execute();
+        $countryId=$countryIdSelect->fetchColumn();
+
+
         $stmt=$this->dbStatement->prepare("SELECT * FROM sales WHERE y_id = :yearId AND p_id = :productId AND c_id = :countryId");
         $stmt->bindParam(':yearId', $yearId, PDO::PARAM_INT);
         $stmt->bindParam(':productId', $productId, PDO::PARAM_INT);
@@ -149,6 +165,10 @@ class DatabaseOperate{
 
 
         
+    }
+
+    function closeConnection(){
+        $this->dbStatement=null;
     }
 
     

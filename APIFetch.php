@@ -85,13 +85,14 @@ class APIFetch{
             // $country=$item['country'];
 
             $dbObject->databaseStore($item['year'],$item['petroleum_product'],$item['country'],$item['sale']);
+            
         
         
         }
 
         ?>
         </table><?php
-            
+        $dbObject->closeConnection();
         }catch(Exception $e){
             die("Exception caught: ". $e->getMessage());
         }
